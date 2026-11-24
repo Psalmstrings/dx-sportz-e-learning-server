@@ -23,8 +23,8 @@ const lessonSchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      enum: ['video', 'external_video', 'pdf', 'text', 'document', 'resource_link', 'assignment', 'quiz'],
-      default: 'text'
+      enum: ['video', 'external_video', 'audio', 'picture', 'pdf', 'document', 'slides', 'text', 'resource_link', 'assignment', 'quiz', 'other'],
+      default: 'document'
     },
     // For text content or formatted rich text
     content: {

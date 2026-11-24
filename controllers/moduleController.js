@@ -125,8 +125,38 @@ const reorderModules = async (req, res, next) => {
   }
 };
 
+// @route   GET /api/modules/admin/program/:programId
+// @access  Private (Admin)
+const getAdminProgramModules = async (req, res, next) => {
+  try {
+    const { programId } = req.params;
+    const modules = await Module.find({ program: programId }).sort({ order: 1 });
+    const moduleIds = modules.map(m => m._id);
+    const lessons = await Lesson.find({ module: { $in: moduleIds } }).sort({ order: 1 });
+
+    const curriculum = modules.map(mod => ({
+      _id: mod._id,
+      title: mod.title,
+      description: mod.description,
+      order: mod.order,
+      status: mod.status,
+      program: mod.program,
+      lessons: lessons.filter(l => l.module.toString() === mod._id.toString())
+    }));
+
+    res.status(200).json({
+      success: true,
+      count: modules.length,
+      modules: curriculum
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getModules,
+  getAdminProgramModules,
   createModule,
   updateModule,
   deleteModule,

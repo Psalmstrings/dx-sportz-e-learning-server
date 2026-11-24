@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {
   getModules,
+  getAdminProgramModules,
   createModule,
   updateModule,
   deleteModule,
@@ -13,6 +14,7 @@ const { protect, authorize } = require('../middleware/authMiddleware');
 router.get('/program/:programId', getModules);
 
 // Admin
+router.get('/admin/program/:programId', protect, authorize('admin'), getAdminProgramModules);
 router.post('/', protect, authorize('admin'), createModule);
 router.put('/reorder', protect, authorize('admin'), reorderModules);
 router.put('/:id', protect, authorize('admin'), updateModule);

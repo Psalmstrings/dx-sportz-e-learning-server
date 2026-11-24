@@ -55,17 +55,18 @@ const materialStorage = multer.diskStorage({
 });
 
 const materialFilter = (req, file, cb) => {
-  const allowed = /pdf|doc|docx|ppt|pptx|mp4|webm|zip|png|jpg|jpeg/;
+  // Supports Audios, Videos, Pictures, PDF, DOCS, Slides and Other Document Formats
+  const allowed = /pdf|doc|docx|txt|rtf|odt|ppt|pptx|odp|key|mp4|webm|mkv|mov|avi|wmv|ogv|m4v|mp3|wav|m4a|ogg|aac|flac|wma|png|jpg|jpeg|webp|gif|svg|bmp|xls|xlsx|csv|zip|rar|7z/;
   const ext = path.extname(file.originalname).toLowerCase().replace('.', '');
   if (allowed.test(ext)) {
     return cb(null, true);
   }
-  cb(new Error('Unsupported material file format. Please upload PDF, Word, PowerPoint, video, or image.'));
+  cb(new Error('Unsupported material file format. Supported formats include Audios (MP3, WAV, M4A, OGG, AAC), Videos (MP4, WEBM, MKV, MOV), Pictures (PNG, JPG, WEBP, SVG), PDF, DOCS (DOC, DOCX, TXT), Slides (PPT, PPTX), spreadsheets, and ZIP archives.'));
 };
 
 const uploadMaterial = multer({
   storage: materialStorage,
-  limits: { fileSize: 100 * 1024 * 1024 }, // 100MB limit for course files
+  limits: { fileSize: 250 * 1024 * 1024 }, // 250MB limit for course files
   fileFilter: materialFilter
 });
 
